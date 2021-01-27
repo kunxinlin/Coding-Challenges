@@ -18,6 +18,7 @@ public class JavaArraylist {
             lines.add(list);
         }
 
+
         n = scanner.nextInt();
         for(int i = 0; i< n; i++){
             int x = scanner.nextInt();
