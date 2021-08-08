@@ -6,10 +6,13 @@ public class Problem8_StringToInteger_atoi {
         System.out.println(myAtoi("     -42"));
         System.out.println(myAtoi("4193 with words"));
         System.out.println(myAtoi("words and 987"));
-        System.out.println(myAtoi("-91283472332"));
+        System.out.println(myAtoi("-91283472332")); //-> -2147483648
+        System.out.println(myAtoi("2147483648")); //-> 2147483647
+        System.out.println(myAtoi("-2147483648")); //-> -2147483648
+        System.out.println(myAtoi("-2147483649")); //-> -2147483648
     }
 
-    public static int myAtoi(String s) {
+/*    public static int myAtoi(String s) {
         //takes care of white space and empty string
         s = s.trim();
         if(s.isEmpty()) return 0;
@@ -48,8 +51,47 @@ public class Problem8_StringToInteger_atoi {
         }else{
             return Math.max((int)result, Integer.MIN_VALUE);
         }
-    }
+    }*/
 
+    //even more hardcore/technical
+    public static int myAtoi(String s) {
+        //takes care of white space and empty string
+        s = s.trim();
+        if(s.isEmpty()) return 0;
+
+        //for + -
+        int sign = 1;
+        int index = 0;
+        //not going to use double as a crutch
+        int result = 0;
+
+        if(s.charAt(index) == '-'){
+            sign = -1;
+            index++;
+        }else if(s.charAt(index) == '+'){
+            index++;
+        }
+
+
+        //ex. 123
+        //iter 1: result = 0x10 = 0 + 1 -> 1
+        //iter 2: result = 1x10 = 10 + 2 -> 12
+        //iter 3: result = 12x10 = 120 + 3 -> 123
+        while(index < s.length() && s.charAt(index) - '0' >= 0 && s.charAt(index) - '0' <= 9){
+            int digit = s.charAt(index) - '0';
+
+            //check for overflow
+            if(result > Integer.MAX_VALUE/10 || result == Integer.MAX_VALUE/10 && digit > 7){
+                return sign == 1 ? Integer.MAX_VALUE: Integer.MIN_VALUE;
+            }
+
+            result = result*10 + digit;
+            index++;
+        }
+
+        //add the sign
+        return result *= sign;
+    }
 
 
 
